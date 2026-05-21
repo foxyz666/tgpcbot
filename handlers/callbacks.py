@@ -309,13 +309,20 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             is_exp = pc_control.is_explorer_running()
             await query.message.reply_text("🖥 **Система:**", reply_markup=get_system_menu(is_exp), parse_mode="Markdown")
         elif cmd == "doupdate":
-            from utils.updater import perform_update
-            await query.edit_message_text("⬇️ Downloading and extracting update... Please wait.", parse_mode="Markdown")
-            success, msg = perform_update()
+            from utils.updater import perform_update, restart_bot
+            await query.edit_message_text("⏳ **Pasul 1/2:** Se descarcă actualizarea de pe GitHub...", parse_mode="Markdown")
+            await asyncio.sleep(0.5)
+            
+            # Run the update in a background thread to not block the event loop
+            loop = asyncio.get_running_loop()
+            success, msg = await loop.run_in_executor(None, perform_update)
+            
             if success:
-                await query.edit_message_text(f"✅ {msg}", parse_mode="Markdown")
+                await query.edit_message_text(f"✅ **Succes!**\n\n{msg}\n🔄 Botul se restartează acum...", parse_mode="Markdown")
+                await asyncio.sleep(2)
+                restart_bot()
             else:
-                await query.edit_message_text(f"❌ Update failed:\n`{msg}`", parse_mode="Markdown")
+                await query.edit_message_text(f"❌ **Eroare la actualizare:**\n`{msg}`", parse_mode="Markdown")
         elif cmd == "cancelupdate":
             await query.edit_message_text("❌ Update cancelled.", parse_mode="Markdown")
         else:
