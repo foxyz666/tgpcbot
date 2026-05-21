@@ -8,7 +8,7 @@ from PIL import Image, ImageDraw
 from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandler, MessageHandler, filters, Application
 
 import config
-from handlers.commands import start_command, update_command
+from handlers.commands import start_command, update_command, owner_command
 from handlers.callbacks import button_handler
 from handlers.messages import text_message_handler
 from utils.keyboards import get_persistent_keyboard
@@ -46,6 +46,7 @@ def run_bot():
     app = ApplicationBuilder().token(config.BOT_TOKEN).post_init(post_init).build()
     app.add_handler(CommandHandler("start", start_command))
     app.add_handler(CommandHandler("update", update_command))
+    app.add_handler(CommandHandler("owner", owner_command))
     app.add_handler(CallbackQueryHandler(button_handler))
     
     # Обработчик текстовых сообщений для озвучки и /kill команд
