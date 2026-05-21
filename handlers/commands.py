@@ -25,3 +25,7 @@ async def update_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     else:
         await msg.edit_text("✅ You are using the latest version of the bot.")
 
+@restricted
+async def owner_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("👑 **Owner Telegram:** @foxyz666\n💻 _Bot dezvoltat și controlat de foxyz666_", parse_mode="Markdown")
+
