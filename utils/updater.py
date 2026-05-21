@@ -7,7 +7,7 @@ import io
 import subprocess
 
 # Версия вашего бота
-CURRENT_VERSION = "1.0.4"
+CURRENT_VERSION = "2.0.0"
 
 # ВАЖНО: Здесь нужно указать ваш репозиторий на GitHub (например "foxyz666/TelegramPCBot")
 GITHUB_REPO = "foxyz666/tgpcbot" 
