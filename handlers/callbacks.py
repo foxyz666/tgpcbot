@@ -311,11 +311,12 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         elif cmd == "doupdate":
             from utils.updater import perform_update, restart_bot
             await query.edit_message_text("⏳ **Pasul 1/2:** Se descarcă actualizarea de pe GitHub...", parse_mode="Markdown")
+            
+            # Ne asigurăm că interfața Telegram a procesat mesajul de mai sus înainte de a bloca firul principal
             await asyncio.sleep(0.5)
             
-            # Run the update in a background thread to not block the event loop
-            loop = asyncio.get_running_loop()
-            success, msg = await loop.run_in_executor(None, perform_update)
+            # Rulăm sincron. Va bloca botul 2-3 secunde, dar este cel mai sigur pe Windows.
+            success, msg = perform_update()
             
             if success:
                 await query.edit_message_text(f"✅ **Succes!**\n\n{msg}\n🔄 Botul se restartează acum...", parse_mode="Markdown")
